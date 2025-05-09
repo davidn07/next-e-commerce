@@ -2,9 +2,22 @@
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import Loader from "@/components/Loader";
 
 export default function Home() {
   const router = useRouter();
+
+  const [isDelayed, setIsDelayed] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsDelayed(false), 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isDelayed) {
+    return <Loader />;
+  }
 
   return (
     <>
