@@ -1,7 +1,32 @@
+"use client";
+import FormInput from "@/components/FormInput";
+import { useForm } from "@/hooks/useForm";
 import Head from "next/head";
 import Link from "next/link";
 
+interface LoginFormValues {
+  email: string;
+  password: string;
+}
+
 export default function Login() {
+  const initialValues: LoginFormValues = {
+    email: "",
+    password: "",
+  };
+
+  const handleSubmit = (values: { email: string; password: string }) => {
+    // Handle form submission logic and log the values in JSON format
+    console.log("Login Form Data:", JSON.stringify(values, null, 2));
+  };
+
+  const {
+    values,
+    errors,
+    handleChange,
+    handleSubmit: handleFormSubmit,
+    isSubmitting,
+  } = useForm(initialValues, handleSubmit);
   return (
     <>
       <Head>
@@ -13,34 +38,29 @@ export default function Login() {
           <h2 className="text-3xl font-bold text-indigo-700 mb-6 text-center">
             Login to ShopVerse
           </h2>
-          <form className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Email
-              </label>
-              <input
-                type="email"
-                className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <input
-                type="password"
-                className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="••••••••"
-                required
-              />
-            </div>
+          <form onSubmit={handleFormSubmit}>
+            <FormInput
+              label="Email"
+              name="email"
+              type="email"
+              value={values.email}
+              onChange={handleChange}
+              error={errors.email}
+            />
+            <FormInput
+              label="Password"
+              name="password"
+              type="password"
+              value={values.password}
+              onChange={handleChange}
+              error={errors.password}
+            />
             <button
               type="submit"
+              disabled={isSubmitting}
               className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition"
             >
-              Sign In
+              {isSubmitting ? "Submitting..." : "Login"}
             </button>
           </form>
           <p className="text-sm text-center text-gray-500 mt-6">
